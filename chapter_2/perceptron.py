@@ -9,7 +9,7 @@ class Perceptron:
     def fit(self, X, y):
         random_gen = np.random.RandomState(self.random_state)
         self.weights = random_gen.normal(loc = 0.0, scale = 0.01, size = X.shape[1])
-        self.bias = np.float(0.0)
+        self.bias = float(0.0)
         self.errors = []
 
         for _ in range(self.n_iters):
