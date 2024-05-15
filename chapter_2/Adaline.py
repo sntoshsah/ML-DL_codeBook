@@ -52,14 +52,14 @@ if __name__ == "__main__":
 
 
     fig, ax = plt.subplots(ncols=2, nrows=1, figsize=(10,4))
-    ada1 = AdalineGD(n_iter=15, lr=0.1).fit(X, y)
+    ada1 = AdalineGD(n_iter=50, lr=0.1).fit(X, y)
     ax[0].plot(range(1, len(ada1.losses) +1), np.log10(ada1.losses), marker = 'o')
     ax[0].set_xlabel("Epochs")
     ax[0].set_ylabel("log(Mean Squared Error)")
     ax[0].set_title('Adaline - Learning Rate 0.1')
 
-    ada2 = AdalineGD(n_iter=15, lr = 0.0001).fit(X,y)
-    ax[1].plot(range(1, len(ada1.losses) +1), np.log10(ada1.losses), marker = 'o')
+    ada2 = AdalineGD(n_iter=50, lr = 0.0001).fit(X,y)
+    ax[1].plot(range(1, len(ada2.losses) +1), np.log10(ada2.losses), marker = 'o')
     ax[1].set_xlabel("Epochs")
     ax[1].set_ylabel("log(Mean Squared Error)")
     ax[1].set_title('Adaline - Learning Rate 0.0001')
