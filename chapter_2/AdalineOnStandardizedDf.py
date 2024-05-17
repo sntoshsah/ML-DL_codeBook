@@ -57,7 +57,6 @@ def plot_decision_regions(X,y, classifier, resolution = 0.02):
 # plt.tight_layout()
 # plt.show()
 
-
 # Standarizing dataset
 X_std = np.copy(X)
 X_std[:,0] = (X[:,0] - X[:,0].mean()) / X[:,0].std()    # Standardarization : (x-mean)/std

@@ -35,6 +35,9 @@ class AdalineGD:
     
     def predict(self, X):
         return np.where(self.activation(self.net_input(X)) >= 0.5, 1, 0)
+
+
+
     
 
 # Plot the loss against the number of epochs for the two different learning rate (lr )
@@ -47,9 +50,6 @@ if __name__ == "__main__":
     y = np.where(y == "Iris-setosa", 0,1)
 
     X = dataframe.iloc[:100, [0,2]].values # Extract sepal length and petal length
-
-
-
 
     fig, ax = plt.subplots(ncols=2, nrows=1, figsize=(10,4))
     ada1 = AdalineGD(n_iter=50, lr=0.1).fit(X, y)
@@ -64,3 +64,7 @@ if __name__ == "__main__":
     ax[1].set_ylabel("log(Mean Squared Error)")
     ax[1].set_title('Adaline - Learning Rate 0.0001')
     plt.show()
+
+    
+
+    
