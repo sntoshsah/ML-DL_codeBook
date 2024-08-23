@@ -5,43 +5,60 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Perceptron
 from sklearn.metrics import accuracy_score
 
+def main():
+    
+    iris_dataset = datasets.load_iris()
+    
+    print(iris_dataset["data"])
+    print(iris_dataset['target'])
+    print(len(iris_dataset))
+    print(np.shape(iris_dataset.data))
+    print(np.shape(iris_dataset.target))
+    
+    # Select only petal length and petal width
+    X = iris_dataset.data[:, [2, 3]]
+    y = iris_dataset.target
+    
+    print("Class Lebels :", np.unique(y))
+    
+    X_train , X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+    
+    print("Label Count in y: ",np.bincount(y))
+    print("Label Count in y_train: ",np.bincount(y_train))
+    print("Label Count in y_test: ",np.bincount(y_test))
+    
+    sc = StandardScaler()
+    sc.fit(X_train) # Estimates the parameters mean (mu) and standard deviation (sigma)
+    X_train_std = sc.transform(X_train)
+    X_test_std = sc.transform(X_test)
+    
+    ppn = Perceptron(eta0=0.01, random_state=42)
+    ppn.fit(X_train_std, y_train)
+    import pickle
+    
+    with open("iris_model.pkl", "wb") as f:
+        pickle.dump(ppn, f)
+    
+    
+    y_pred = ppn.predict(X_test_std)
+    print("MisClassified examples : %d" % (y_test != y_pred).sum())
+    
+    
+    print("Accuracy Score:  %.3f" % accuracy_score(y_test, y_pred))
+    
+    
+    
+    print("Accuracy : %.3f" % ppn.score(X_test_std, y_test))
 
-iris_dataset = datasets.load_iris()
+    X_combined_std = np.vstack((X_train_std, X_test_std))
+    y_combined = np.hstack((y_train, y_test))
+    plot_decision_regions(X=X_combined_std,
+                        y=y_combined,
+                        classifier=ppn,
+                        test_index=range(105,150))
 
-print(iris_dataset["data"])
-print(iris_dataset['target'])
-print(len(iris_dataset))
-print(np.shape(iris_dataset.data))
-print(np.shape(iris_dataset.target))
-
-X = iris_dataset.data
-y = iris_dataset.target
-print("Class Lebels :", np.unique(y))
-
-X_train , X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
-
-print("Label Count in y: ",np.bincount(y))
-print("Label Count in y_train: ",np.bincount(y_train))
-print("Label Count in y_test: ",np.bincount(y_test))
-
-sc = StandardScaler()
-sc.fit(X_train) # Estimates the parameters mean (mu) and standard deviation (sigma)
-X_train_std = sc.transform(X_train)
-X_test_std = sc.transform(X_test)
-
-ppn = Perceptron(eta0=0.01, random_state=42)
-ppn.fit(X_train_std, y_train)
-y_pred = ppn.predict(X_test_std)
-print("MisClassified examples : %d" % (y_test != y_pred).sum())
-
-
-print("Accuracy Score:  %.3f" % accuracy_score(y_test, y_pred))
-
-
-
-print("Accuracy : %.3f" % ppn.score(X_test_std, y_test))
-
-# Plot decision regions 
+    
+# Plot decision regions
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 
@@ -85,27 +102,27 @@ def plot_decision_regions(X, y, classifier, test_index=None, resolution = 0.02):
         # plot all examples
         X_test, y_test = X[test_index, :], y[test_index]
         plt.scatter(X_test[:, 0], X_test[:, 1],
-        c = "none", 
+        c = "none",
         edgecolors="black",
         alpha=1.0,
         linewidth = 1,
         marker='o',
         s=100,
         label="Test set")
+    plt.xlabel("Petal Length [standardarized]")
+    plt.ylabel("Petal Width [standarized]")
+    plt.legend(loc= 'upper left')
+    plt.tight_layout()
+    # Save the plot as an image file
+    plt.savefig('decision_region_plot.png')
+
+    
 
 
-X_combined_std = np.vstack((X_train_std, X_test_std))
-y_combined = np.hstack((y_train, y_test))
-plot_decision_regions(X=X_combined_std,
-                    y=y_combined,
-                    classifier=ppn,
-                    test_index=range(105,150))
 
-plt.xlabel("Petal Length [standardarized]")
-plt.ylabel("Petal Width [standarized]")
-plt.legend(loc= 'upper left')
-plt.tight_layout()
-plt.show()
+if __name__ == "__main__":
+    main()
+
 
 
 
