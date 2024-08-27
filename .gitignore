@@ -1,2 +1,3 @@
 .venv
 *.pyc
+*/mnist_images
